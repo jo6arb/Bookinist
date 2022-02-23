@@ -5,13 +5,15 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Extensions.Hosting;
 
 namespace Bookinist
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
+        private IHost __Host;
+
+        public IHost Host => __Host
+        ??= __Ho
     }
 }
