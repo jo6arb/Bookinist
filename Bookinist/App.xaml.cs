@@ -5,6 +5,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Bookinist.Services;
+using Bookinist.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -24,11 +26,10 @@ namespace Bookinist
            .ConfigureServices(ConfigureServices)
         ;
 
-        public static void ConfigureServices(HostBuilderContext host, IServiceCollection services)
-        {
-
-        }
-
+        public static void ConfigureServices(HostBuilderContext host, IServiceCollection services) => services
+           .AddViewModels()
+           .AddServices()
+        ;
         protected override async void OnStartup(StartupEventArgs e)
         {
             var host = Host;
@@ -40,7 +41,7 @@ namespace Bookinist
         {
             var host = Host;
             base.OnExit(e);
-            await Host.StopAsync()
+            await Host.StopAsync();
         }
     }
 }
