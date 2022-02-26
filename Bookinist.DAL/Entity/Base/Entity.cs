@@ -1,6 +1,8 @@
-﻿namespace Bookinist.DAL.Entity.Base;
+﻿using Bookinist.Interfaces;
 
-public abstract class Entity
+namespace Bookinist.DAL.Entity.Base;
+
+public abstract class Entity : IEntity
 {
     public int Id { get; set; }
 }
