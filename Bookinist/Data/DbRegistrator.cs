@@ -1,4 +1,5 @@
 ﻿using System;
+using Bookinist.DAL;
 using Bookinist.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,8 +29,8 @@ static class DbRegistrator
                         opt.UseInMemoryDatabase("Bookinist.db");
                         break;
                 }
-            }
-        )
+            })
        .AddTransient<DbInitializer>()
+       .AddRepositoriesInDb()
     ;
 }

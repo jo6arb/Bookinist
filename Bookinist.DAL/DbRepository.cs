@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bookinist.DAL;
 
-class DbRepository<T> : IRepository<T> where T : Entity.Base.Entity, new()
+internal class DbRepository<T> : IRepository<T> where T : Entity.Base.Entity, new()
 {
     private readonly BookinistDb _db;
     private readonly DbSet<T> _Set;
