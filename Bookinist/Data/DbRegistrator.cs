@@ -28,5 +28,7 @@ static class DbRegistrator
                         break;
                 }
             }
-        );
+        )
+       .AddTransient<DbInitializer>()
+    ;
 }

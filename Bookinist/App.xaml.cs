@@ -30,6 +30,11 @@ namespace Bookinist
         protected override async void OnStartup(StartupEventArgs e)
         {
             var host = Host;
+
+            using (var scope = Services.CreateScope())
+                scope.ServiceProvider.GetRequiredService<DbInitializer>().InitializeAsync().Wait();
+
+
             base.OnStartup(e);
             await Host.StartAsync();
         }
