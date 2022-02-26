@@ -8,7 +8,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Bookinist
 {
-    public partial class App : Application
+    public partial class App
     {
         private static IHost __Host;
 
@@ -23,7 +23,7 @@ namespace Bookinist
         ;
 
         public static void ConfigureServices(HostBuilderContext host, IServiceCollection services) => services
-           .AddDataBase(host.Configuration.GetSection("DataBase"))
+           .AddDataBase(host.Configuration.GetSection("Data"))
            .AddViewModels()
            .AddServices()
         ;
@@ -32,9 +32,8 @@ namespace Bookinist
             var host = Host;
 
             using (var scope = Services.CreateScope())
-                scope.ServiceProvider.GetRequiredService<DbInitializer>().InitializeAsync().Wait();
-
-
+                await scope.ServiceProvider.GetRequiredService<DbInitializer>().InitializeAsync();
+            
             base.OnStartup(e);
             await Host.StartAsync();
         }

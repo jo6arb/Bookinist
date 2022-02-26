@@ -10,6 +10,7 @@ static class DbRegistrator
 {
     public static IServiceCollection AddDataBase(this IServiceCollection services, IConfiguration Configuration) => services
        .AddDbContext<BookinistDb>(
+            
             opt =>
             {
                 var type = Configuration["Type"];
