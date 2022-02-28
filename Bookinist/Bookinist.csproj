@@ -12,7 +12,7 @@
     <Folder Include="Infrastructure\Commands\" />
     <Folder Include="Models\" />
     <Folder Include="Data\" />
-    <Folder Include="Services\" />
+    <Folder Include="Services\interfaces\" />
     <Folder Include="ViewModels\" />
   </ItemGroup>
 
