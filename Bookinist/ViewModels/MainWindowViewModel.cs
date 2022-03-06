@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using Bookinist.DAL.Context;
 using Bookinist.DAL.Entity;
 using Bookinist.Interfaces;
 using Bookinist.Services.interfaces;
@@ -91,7 +92,7 @@ class MainWindowViewModel : ViewModel
     private void OnShowStatisticViewCommandExecuted()
     {
         CurrentModel = new StatisticViewModel(
-            _Books, _Buyers, _Sellers,
+             _Books, _Buyers, _Sellers,
             _Deals
             );
     }

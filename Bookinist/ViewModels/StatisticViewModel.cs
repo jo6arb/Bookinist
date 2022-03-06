@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Bookinist.DAL.Context;
 using Bookinist.DAL.Entity;
 using Bookinist.Interfaces;
+using Bookinist.Models;
 using MathCore.WPF.Commands;
 using MathCore.WPF.ViewModels;
 using Microsoft.EntityFrameworkCore;
@@ -16,40 +19,40 @@ class StatisticViewModel : ViewModel
     private readonly IRepository<Seller> _Sellers;
     private readonly IRepository<Deal> _Deals;
 
-    #region BooksCount : int - Количество книг
+    public ObservableCollection<BestSellersInfo> BestSellers { get; } = new ObservableCollection<BestSellersInfo>();
 
-    /// <summary>Количество книг</summary>
-    private int _BooksCount;
-
-    /// <summary>Количество книг</summary>
-    public int BooksCount { get => _BooksCount; set => Set(ref _BooksCount, value); }
-
-    #endregion
-
-    #region Command ComputeStatisticCommand - Вычислить статистические данные
+   #region Command ComputeStatisticCommand - Вычислить статистические данные
 
     /// <summary>Вычислить статистические данные</summary>
     private ICommand _ComputeStatisticCommand;
 
     /// <summary>Вычислить статистические данные</summary>
     public ICommand ComputeStatisticCommand => _ComputeStatisticCommand
-        ??= new LambdaCommandAsync(OnComputeStatisticCommandExecuted, CanComputeStatisticCommandExecute);
-
-    /// <summary>Проверка возможности выполнения - Вычислить статистические данные</summary>
-    private bool CanComputeStatisticCommandExecute() => true;
-
+        ??= new LambdaCommandAsync(OnComputeStatisticCommandExecuted);
+    
     /// <summary>Логика выполнения - Вычислить статистические данные</summary>
     private async Task OnComputeStatisticCommandExecuted()
     {
-        BooksCount = await _Books.Items.CountAsync();
 
-        var deals = _Deals.Items;
+        await ComputeDealsStatisticAsync();
+        
+    }
 
-        /*var bestsellers = await deals.GroupBy(deal => deal.Book)
-           .Select(book_deals => new {Book = book_deals.Key, Count = book_deals.Count()})
-           .OrderByDescending(book => book.Count)
+    private async Task ComputeDealsStatisticAsync()
+    {
+        var bestsellers_query = _Deals.Items
+           .GroupBy(b => b.Book.Id)
+           .Select(deals => new { BookId = deals.Key, Count = deals.Count() })
+           .OrderByDescending(deals => deals.Count)
            .Take(5)
-           .ToArrayAsync();*/
+           .Join(_Books.Items,
+                deals => deals.BookId,
+                book => book.Id,
+                (deals, book) => new BestSellersInfo { Book = book, SellCount = deals.Count });
+
+        BestSellers.Clear();
+        foreach (var bestSeller in await bestsellers_query.ToArrayAsync())
+            BestSellers.Add(bestSeller);
 
     }
 
