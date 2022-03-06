@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Bookinist.DAL.Context;
 using Bookinist.DAL.Entity;
 using Bookinist.Interfaces;
 using Bookinist.Models;
+using Bookinist.Service;
 using MathCore.WPF.Commands;
 using MathCore.WPF.ViewModels;
 using Microsoft.EntityFrameworkCore;
@@ -42,17 +42,21 @@ class StatisticViewModel : ViewModel
     {
         var bestsellers_query = _Deals.Items
            .GroupBy(b => b.Book.Id)
-           .Select(deals => new { BookId = deals.Key, Count = deals.Count() })
+           .Select(deals => new { BookId = deals.Key, Count = deals.Count(), Sum = deals.Sum(d => d.Price) })
            .OrderByDescending(deals => deals.Count)
            .Take(5)
            .Join(_Books.Items,
                 deals => deals.BookId,
                 book => book.Id,
-                (deals, book) => new BestSellersInfo { Book = book, SellCount = deals.Count });
+                (deals, book) => new BestSellersInfo
+                {
+                    Book = book,
+                    SellCount = deals.Count,
+                    SumCost = deals.Sum
+                });
 
-        BestSellers.Clear();
-        foreach (var bestSeller in await bestsellers_query.ToArrayAsync())
-            BestSellers.Add(bestSeller);
+        BestSellers.AddClear(await bestsellers_query.ToArrayAsync());
+
 
     }
 
