@@ -2,7 +2,7 @@
 
 public class Category : Base.NamedEntity
 {
-    public virtual ICollection<Book> Books { get; set; }
+    public virtual ICollection<Book> Books { get; set; } = new HashSet<Book>();
 
     public override string ToString() => $"Кадегория {Name} ";
 }

@@ -57,7 +57,6 @@ class StatisticViewModel : ViewModel
 
         BestSellers.AddClear(await bestsellers_query.ToArrayAsync());
 
-
     }
 
     #endregion
